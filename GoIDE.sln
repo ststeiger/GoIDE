@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoIDE", "GoIDE\GoIDE.csproj", "{0EBCF2FD-6B1A-476F-A03C-8689F5B617F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoIDEtest", "GoIDEtest\GoIDEtest.csproj", "{7A31F447-25E0-4DDE-9E93-A0F708FA9E7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EBCF2FD-6B1A-476F-A03C-8689F5B617F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EBCF2FD-6B1A-476F-A03C-8689F5B617F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EBCF2FD-6B1A-476F-A03C-8689F5B617F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EBCF2FD-6B1A-476F-A03C-8689F5B617F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A31F447-25E0-4DDE-9E93-A0F708FA9E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A31F447-25E0-4DDE-9E93-A0F708FA9E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A31F447-25E0-4DDE-9E93-A0F708FA9E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A31F447-25E0-4DDE-9E93-A0F708FA9E7C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
