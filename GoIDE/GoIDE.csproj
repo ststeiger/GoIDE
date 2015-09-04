@@ -494,6 +494,7 @@
       <DependentUpon>goide.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebProcessConfig.cs" />
     <Compile Include="WebProcess.cs" />
     <Compile Include="ajax\ShellExecute.ashx.cs">
       <DependentUpon>ShellExecute.ashx</DependentUpon>
@@ -501,7 +502,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ajax\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="doc\articles\wiki\final-noclosure.go" />

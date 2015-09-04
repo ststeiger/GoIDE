@@ -1,25 +1,45 @@
 ﻿
-using System.Collections.Generic;
-using System.Web;
+// using System.Collections.Generic;
 
 
 namespace GoIDE
 {
-    
+
 
     // http://stackoverflow.com/questions/4107683/controling-cmd-exe-from-winforms/4118494#4118494
-    public class WebProcess
+    public partial class WebProcess : System.IDisposable
     {
-        System.Diagnostics.Process spdTerminal;
-        System.IO.StreamWriter swInputStream;
+        public delegate void fpTextOutputCallback_t(string strText);
+        
+        System.Diagnostics.Process m_ProcessInstance;
+        System.IO.StreamWriter m_InputStreamWriter;
 
-        public delegate void fpTextBoxCallback_t(string strText);
-        public fpTextBoxCallback_t fpTextBoxCallback;
+        public System.Web.HttpContext m_HttpContext;
+        public fpTextOutputCallback_t m_TextOutputCallback;
+        
+
+        public WebProcess():this(null, null)
+        { }
 
 
-        public WebProcess()
+        public WebProcess(System.Web.HttpContext context)
+            : this(context, null)
+        { } // End Constructor
+
+
+        public WebProcess(fpTextOutputCallback_t callback)
+            :this(null, callback)
+        { }
+
+
+        public WebProcess(System.Web.HttpContext context, fpTextOutputCallback_t callback)
         {
-            fpTextBoxCallback = new fpTextBoxCallback_t(AddTextToOutputTextBox);
+            this.m_HttpContext = context;
+
+            if (callback == null)
+                this.m_TextOutputCallback = new fpTextOutputCallback_t(DefaultTextOutput);
+            else
+                this.m_TextOutputCallback = callback;
         } // End Constructor
 
 
@@ -29,18 +49,23 @@ namespace GoIDE
         } // End Destructor
 
 
-        public void AddTextToOutputTextBox(string strText)
+        public void DefaultTextOutput(string strText)
         {
-            try
+            if (this.m_HttpContext != null)
             {
-                System.Web.HttpContext.Current.Response.Output.WriteLine(strText);
+                try
+                {
+                    this.m_HttpContext.Response.Output.WriteLine(strText);
+                }
+                catch (System.Exception ex)
+                {
+                    System.Console.WriteLine(ex.Message);
+                    throw;
+                }
             }
-            catch(System.Exception ex)
-            {
-                System.Console.WriteLine(ex.Message);
-            }
-
-        } // End Sub AddTextToOutputTextBox
+            else
+                System.Console.WriteLine(strText);
+        } // End Sub DefaultTextOutput
 
 
         private void ConsoleOutputHandler(object sendingProcess, System.Diagnostics.DataReceivedEventArgs outLine)
@@ -48,27 +73,35 @@ namespace GoIDE
             
             if (!string.IsNullOrEmpty(outLine.Data))
             {
-                fpTextBoxCallback(System.Environment.NewLine + outLine.Data);
+                m_TextOutputCallback(System.Environment.NewLine + outLine.Data);
             } // End if (!String.IsNullOrEmpty(outLine.Data))
 
         } // End Sub ConsoleOutputHandler
 
 
-        public void SendInput(string command)
+
+        public void SendInput(string executable, string format, params object[] args )
         {
-            ExecuteCommand(command);
+            SendInput(executable, string.Format(format, args));
+        }
 
-            while (!this.spdTerminal.HasExited)
-            {
-                System.Threading.Thread.Sleep(200);
-            }
 
-            System.Threading.Thread.Sleep(5000);
+        public void SendInput(string executable, string command)
+        {
+            if (executable == null)
+                throw new System.ArgumentNullException("executable is null");
 
-            if (!this.spdTerminal.HasExited)
-            {
-                swInputStream.WriteLine(command);
-            }
+            executable = executable.ToLowerInvariant();
+
+            ExecuteCommand(executable, command);
+
+            m_ProcessInstance.WaitForExit();
+
+
+            //if (!this.spdTerminal.HasExited)
+            //{
+            //    m_InputStreamWriter.WriteLine(command);
+            //}
         }
 
 
@@ -79,56 +112,73 @@ namespace GoIDE
         } // End Sub ProcessExited
 
 
-        private void ExecuteCommand(string command)
+        private void ExecuteCommand(string executable, string command)
         {
-            spdTerminal = new System.Diagnostics.Process();
+            m_ProcessInstance = new System.Diagnostics.Process();
 
-            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
-                //spdTerminal.StartInfo.FileName = "/usr/bin/gnome-terminal";
-                // spdTerminal.StartInfo.FileName = "/bin/bash";
-                spdTerminal.StartInfo.FileName = "go";
-            else
-                spdTerminal.StartInfo.FileName = "cmd.exe";
+            switch (executable)
+            {
+                case "go":
+                    m_ProcessInstance.StartInfo.FileName = m_GoExe;
+                    break;
+                case "gofmt":
+                    m_ProcessInstance.StartInfo.FileName = m_GoFmtExe;
+                    break;
+            }
 
-            spdTerminal.StartInfo.Arguments = command;
+            
 
-            // AddTextToOutputTextBox("Using this terminal: " + spdTerminal.StartInfo.FileName);
+            if (!string.IsNullOrEmpty(m_GoRoot))
+                m_ProcessInstance.StartInfo.EnvironmentVariables["GOROOT"] = m_GoRoot;
+            
+            m_ProcessInstance.StartInfo.Arguments = command;
 
-            spdTerminal.StartInfo.UseShellExecute = false;
-            spdTerminal.StartInfo.CreateNoWindow = true;
-            spdTerminal.StartInfo.RedirectStandardInput = true;
-            spdTerminal.StartInfo.RedirectStandardOutput = true;
-            spdTerminal.StartInfo.RedirectStandardError = true;
+            // AddTextToOutputTextBox("Using this terminal: " + m_ProcessInstance.StartInfo.FileName);
 
-            spdTerminal.EnableRaisingEvents = true;
-            spdTerminal.Exited += new System.EventHandler(ProcessExited);
-            spdTerminal.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
-            spdTerminal.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
+            m_ProcessInstance.StartInfo.UseShellExecute = false;
+            m_ProcessInstance.StartInfo.CreateNoWindow = true;
+            m_ProcessInstance.StartInfo.RedirectStandardInput = true;
+            m_ProcessInstance.StartInfo.RedirectStandardOutput = true;
+            m_ProcessInstance.StartInfo.RedirectStandardError = true;
 
-            spdTerminal.Start();
+            m_ProcessInstance.EnableRaisingEvents = true;
+            m_ProcessInstance.Exited += new System.EventHandler(ProcessExited);
+            m_ProcessInstance.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
+            m_ProcessInstance.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
 
-            swInputStream = spdTerminal.StandardInput;
-            spdTerminal.BeginOutputReadLine();
-            spdTerminal.BeginErrorReadLine();
+            m_ProcessInstance.Start();
+
+            m_InputStreamWriter = m_ProcessInstance.StandardInput;
+            m_ProcessInstance.BeginOutputReadLine();
+            m_ProcessInstance.BeginErrorReadLine();
         } // End Sub WebProcess_Load
 
 
         private void WebProcess_Quit()
         {
-            if (!spdTerminal.HasExited)
+            if (m_ProcessInstance == null)
+                return;
+
+            if (!m_ProcessInstance.HasExited)
             {
-                swInputStream.WriteLine("exit");
-                swInputStream.Close();    
+                m_InputStreamWriter.WriteLine("exit");
+                m_InputStreamWriter.Close();    
             }
 
-            //spdTerminal.WaitForExit();
-            spdTerminal.Close();
-            spdTerminal.Dispose();
+            // m_ProcessInstance.WaitForExit();
+            m_ProcessInstance.Close();
+            m_ProcessInstance.Dispose();
             // Application.Exit();
         } // End Sub btnQuit_Click
 
 
-    } // End Class WebProcess
+        public void Dispose()
+        {
+            WebProcess_Quit();
+        }
+
+
+    } // End Partial Class WebProcess
 
 
 }
