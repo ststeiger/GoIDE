@@ -61,6 +61,7 @@
 
 
     <script src="Scripts/CodeMirror/codemirror.js"></script>
+    <script src="Scripts/CodeMirror/addon/selection/active-line.js"></script>
     <script src="Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <script src="Scripts/CodeMirror/modes/go/go.js"></script>
     <!--
@@ -88,6 +89,16 @@
         {
             border: 1px solid #999;
             background: #ffc;
+        }
+
+        .breakpoints
+        {
+            width: .8em;
+        }
+
+        .breakpoint
+        {
+            color: #822;
         }
 
     </style>
@@ -157,22 +168,42 @@ func main() {
 	    			return thisInstance.editor.getTextArea().value;
 	    		}
 
-	    		,setSize(width, height)
+	    		,setSize: function(width, height)
 	    		{
 	    			thisInstance.editor.setSize(width, height);
-	    		}
+		        }
+
+
+                // For BreakPoint
+		        ,makeMarker: function() 
+		        {
+		            var marker = document.createElement("div");
+		            marker.style.color = "#822";
+		            marker.innerHTML = "●";
+		            return marker;
+		        }
 
 	    		,createEditor: function ()
 	    		{
 					var edit = CodeMirror.fromTextArea(ele, {
 						//theme: "elegant",
-						theme: "blackboard",
+					    theme: "blackboard",
+					    gutters: ["CodeMirror-linenumbers", "breakpoints"],
+					    lineNumbers: true,
+					    styleActiveLine: true,
 						matchBrackets: true,
 						indentUnit: 8,
 						tabSize: 8,
 						indentWithTabs: true,
 						mode: "text/x-go"
 					});
+
+					edit.on("gutterClick", function(cm, n) {
+					    var info = cm.lineInfo(n);
+					    cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : thisInstance.makeMarker());
+					});
+
+
 
 					edit.setSize("100%", "100%");
 

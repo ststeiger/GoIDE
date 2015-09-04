@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="Scripts/CodeMirror/theme/<asp:Literal ID="litTheme" runat="server"></asp:Literal>.css" />
 
     <script src="Scripts/CodeMirror/codemirror.js"></script>
+    <script src="Scripts/CodeMirror/addon/selection/active-line.js"></script>
     <script src="Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <script src="Scripts/CodeMirror/modes/go/go.js"></script>
 
@@ -53,7 +54,6 @@
 
         .breakpoints {width: .8em;}
         .breakpoint { color: #822; }
-      
 
     </style>
 </head>
@@ -114,15 +114,31 @@ func main() {
             //theme: "elegant",
             // theme: "dracula",
             theme: "<asp:Literal id="litThemeName" runat="server" />",
+            gutters: ["CodeMirror-linenumbers", "breakpoints"],
+            lineNumbers: true,
+            styleActiveLine: true,
             matchBrackets: true,
             indentUnit: 8,
             tabSize: 8,
             indentWithTabs: true,
             mode: "text/x-go"
-        });
+            });
+          
 
         editor.setSize("100%", "100%");
         
+        editor.on("gutterClick", function(cm, n) {
+            var info = cm.lineInfo(n);
+            cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : makeMarker());
+        });
+
+        function makeMarker() {
+            var marker = document.createElement("div");
+            marker.style.color = "#822";
+            marker.innerHTML = "●";
+            return marker;
+        }
+
     </script>
     	
         </div>
