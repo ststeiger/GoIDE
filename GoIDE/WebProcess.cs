@@ -1,64 +1,14 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.Web;
 
 
 namespace GoIDE
 {
-
-
-    public class MessageBox
-    {
-        public static void Show(string message)
-        {
-            Show(message, "");
-        }
-
-
-        public static void Show(string message, string title)
-        {
-            System.Console.WriteLine(message);
-        }
-    }
-
-
-    public class MyTextBoxSimulator
-    {
-
-        public string Text;
-
-        public void AppendText(string str)
-        {
-            this.Text = this.Text + str;
-        }
-
-        
-        public void Clear()
-        {
-            this.Text = "";
-        }
-
-    }
-
-
-    public partial class WebProcess
-    {
-        MyTextBoxSimulator txtOutput = new MyTextBoxSimulator();
-        MyTextBoxSimulator txtInputCommand = new MyTextBoxSimulator();
-
-        public bool InvokeRequired = false;
-        public void Invoke(fpTextBoxCallback_t fpTextBoxCallback, string bla)
-        {
-            fpTextBoxCallback(bla);
-        }
-
-    }
-
-
+    
 
     // http://stackoverflow.com/questions/4107683/controling-cmd-exe-from-winforms/4118494#4118494
-    public partial class WebProcess
+    public class WebProcess
     {
         System.Diagnostics.Process spdTerminal;
         System.IO.StreamWriter swInputStream;
@@ -70,11 +20,10 @@ namespace GoIDE
         public WebProcess()
         {
             fpTextBoxCallback = new fpTextBoxCallback_t(AddTextToOutputTextBox);
-            WebProcess_Load();
         } // End Constructor
 
 
-        ~WebProcess()  // 
+        ~WebProcess()  // Destructor 
         {
             WebProcess_Quit();
         } // End Destructor
@@ -82,54 +31,68 @@ namespace GoIDE
 
         public void AddTextToOutputTextBox(string strText)
         {
-            this.txtOutput.AppendText(strText);
+            try
+            {
+                System.Web.HttpContext.Current.Response.Output.WriteLine(strText);
+            }
+            catch(System.Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
+
         } // End Sub AddTextToOutputTextBox
 
 
         private void ConsoleOutputHandler(object sendingProcess, System.Diagnostics.DataReceivedEventArgs outLine)
         {
-            if (!String.IsNullOrEmpty(outLine.Data))
+            
+            if (!string.IsNullOrEmpty(outLine.Data))
             {
-                //this.Invoke(new fpTextBoxCallback_t(AddTextToOutputTextBox), Environment.NewLine + outLine.Data);
-                if (this.InvokeRequired)
-                    this.Invoke(fpTextBoxCallback, Environment.NewLine + outLine.Data);
-                else
-                    fpTextBoxCallback(Environment.NewLine + outLine.Data);
+                fpTextBoxCallback(System.Environment.NewLine + outLine.Data);
             } // End if (!String.IsNullOrEmpty(outLine.Data))
 
         } // End Sub ConsoleOutputHandler
 
 
-        private void btnExecute_Click(object sender, EventArgs e)
+        public void SendInput(string command)
         {
-            if (this.spdTerminal.HasExited)
+            ExecuteCommand(command);
+
+            while (!this.spdTerminal.HasExited)
             {
-                MessageBox.Show("You idiot, you have terminated the process", "Error");
-                return;
-            } // End if (this.spdTerminal.HasExited)
+                System.Threading.Thread.Sleep(200);
+            }
 
-            swInputStream.WriteLine(txtInputCommand.Text);
-            txtInputCommand.Clear();
-        } // End Sub btnExecute_Click
+            System.Threading.Thread.Sleep(5000);
+
+            if (!this.spdTerminal.HasExited)
+            {
+                swInputStream.WriteLine(command);
+            }
+        }
 
 
-        public void ProcessExited(object sender, EventArgs e)
+        public void ProcessExited(object sender, System.EventArgs e)
         {
-            MessageBox.Show("You idiot, you terminated the process.", "PBKAC");
+            System.Console.WriteLine("Process exited.");
+            // MessageBox.Show("You idiot, you terminated the process.", "PBKAC");
         } // End Sub ProcessExited
 
 
-        private void WebProcess_Load()
+        private void ExecuteCommand(string command)
         {
             spdTerminal = new System.Diagnostics.Process();
 
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
                 //spdTerminal.StartInfo.FileName = "/usr/bin/gnome-terminal";
-                spdTerminal.StartInfo.FileName = "/bin/bash";
+                // spdTerminal.StartInfo.FileName = "/bin/bash";
+                spdTerminal.StartInfo.FileName = "go";
             else
                 spdTerminal.StartInfo.FileName = "cmd.exe";
 
-            AddTextToOutputTextBox("Using this terminal: " + spdTerminal.StartInfo.FileName);
+            spdTerminal.StartInfo.Arguments = command;
+
+            // AddTextToOutputTextBox("Using this terminal: " + spdTerminal.StartInfo.FileName);
 
             spdTerminal.StartInfo.UseShellExecute = false;
             spdTerminal.StartInfo.CreateNoWindow = true;
@@ -138,7 +101,7 @@ namespace GoIDE
             spdTerminal.StartInfo.RedirectStandardError = true;
 
             spdTerminal.EnableRaisingEvents = true;
-            spdTerminal.Exited += new EventHandler(ProcessExited);
+            spdTerminal.Exited += new System.EventHandler(ProcessExited);
             spdTerminal.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
             spdTerminal.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
 
@@ -152,8 +115,12 @@ namespace GoIDE
 
         private void WebProcess_Quit()
         {
-            swInputStream.WriteLine("exit");
-            swInputStream.Close();
+            if (!spdTerminal.HasExited)
+            {
+                swInputStream.WriteLine("exit");
+                swInputStream.Close();    
+            }
+
             //spdTerminal.WaitForExit();
             spdTerminal.Close();
             spdTerminal.Dispose();

@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,8 +35,12 @@ namespace GoIDEtest
 
         public void OnQuit()
         {
-            swInputStream.WriteLine("exit");
-            swInputStream.Close();
+            if (!spdTerminal.HasExited)
+            {
+                swInputStream.WriteLine("exit");
+                swInputStream.Close();
+            }
+
             //spdTerminal.WaitForExit();
             spdTerminal.Close();
             spdTerminal.Dispose();
@@ -47,31 +50,33 @@ namespace GoIDEtest
 
         private void ConsoleOutputHandler(object sendingProcess, System.Diagnostics.DataReceivedEventArgs outLine)
         {
-            if (!String.IsNullOrEmpty(outLine.Data))
+            if (!string.IsNullOrEmpty(outLine.Data))
             {
                 //this.Invoke(new fpTextBoxCallback_t(AddTextToOutputTextBox), Environment.NewLine + outLine.Data);
                 if (this.InvokeRequired)
-                    this.Invoke(fpTextBoxCallback, Environment.NewLine + outLine.Data);
+                    this.Invoke(fpTextBoxCallback, System.Environment.NewLine + outLine.Data);
                 else
-                    fpTextBoxCallback(Environment.NewLine + outLine.Data);
+                    fpTextBoxCallback(System.Environment.NewLine + outLine.Data);
             } // End if (!String.IsNullOrEmpty(outLine.Data))
 
         } // End Sub ConsoleOutputHandler
 
 
-        public void ProcessExited(object sender, EventArgs e)
+        public void ProcessExited(object sender, System.EventArgs e)
         {
-            MessageBox.Show("You idiot, you terminated the process.", "PBKAC");
+            System.Console.WriteLine("Process exited");
+            // MessageBox.Show("You idiot, you terminated the process.", "PBKAC");
         } // End Sub ProcessExited
 
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1_Load(object sender, System.EventArgs e)
         {
             spdTerminal = new System.Diagnostics.Process();
 
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
                 //spdTerminal.StartInfo.FileName = "/usr/bin/gnome-terminal";
-                spdTerminal.StartInfo.FileName = "/bin/bash";
+                // spdTerminal.StartInfo.FileName = "/bin/bash";
+                spdTerminal.StartInfo.FileName = "go";
             else
                 spdTerminal.StartInfo.FileName = "cmd.exe";
 
@@ -84,7 +89,7 @@ namespace GoIDEtest
             spdTerminal.StartInfo.RedirectStandardError = true;
 
             spdTerminal.EnableRaisingEvents = true;
-            spdTerminal.Exited += new EventHandler(ProcessExited);
+            spdTerminal.Exited += new System.EventHandler(ProcessExited);
             spdTerminal.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
             spdTerminal.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(ConsoleOutputHandler);
 
@@ -96,7 +101,7 @@ namespace GoIDEtest
         } // End Sub Form1_Load
 
 
-        private void btnExecute_Click(object sender, EventArgs e)
+        private void btnExecute_Click(object sender, System.EventArgs e)
         {
             if (this.spdTerminal.HasExited)
             {

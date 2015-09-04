@@ -40,56 +40,9 @@
     
     <link rel="stylesheet" href="Scripts/CodeMirror/theme/<asp:Literal ID="litTheme" runat="server"></asp:Literal>.css" />
 
-    <!--
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/3024-day.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/3024-night.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/abcdef.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/ambiance.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/base16-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/base16-light.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/blackboard.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/cobalt.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/colorforth.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/dracula.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/eclipse.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/elegant.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/erlang-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/icecoder.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/lesser-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/liquibyte.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/material.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/mbo.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/mdn-like.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/midnight.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/monokai.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/neat.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/neo.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/night.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/paraiso-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/paraiso-light.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/pastel-on-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/rubyblue.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/seti.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/solarized.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/the-matrix.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/tomorrow-night-bright.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/tomorrow-night-eighties.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/ttcn.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/twilight.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/vibrant-ink.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/xq-dark.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/xq-light.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/yeti.css" />
-    <link rel="stylesheet" href="Scripts/CodeMirror/theme/zenburn.css" />
-    -->
-
-
     <script src="Scripts/CodeMirror/codemirror.js"></script>
     <script src="Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <script src="Scripts/CodeMirror/modes/go/go.js"></script>
-    <!--
-    <link rel="stylesheet" href="Scripts/CodeMirror/docs.css">
-    -->
 
     <style>
         .CodeMirror
@@ -166,8 +119,7 @@ func main() {
         editor.setSize("100%", "100%");
         
     </script>
-
-    <p><strong>MIME type:</strong> <code>text/x-go</code></p>
+    	
         </div>
     </form>
 </body>

@@ -10,6 +10,3 @@ REM https://code.google.com/p/golangide/wiki/liteidex
 REM SET GOPATH=D:\Programme\Go\bin
 d:\
 cd D:\Programme\Go
-
-
-
