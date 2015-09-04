@@ -19,11 +19,12 @@ namespace GoIDE
             using (WebProcess wp = new WebProcess(context, OutputProcessor))
             {
 
+                string filename = @"D:\Programme\Go\bin\hw.go";
                 if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
-                    wp.SendInput("go", "run", @"/root/sources/go/hw.go");
-                else
-                    //wp.SendInput("go", "{0} \"{1}\"", "run", @"D:\Programme\Go\bin\hw.go");
-                    wp.SendInput("gofmt", "\"{1}\"", "run", @"D:\Programme\Go\bin\hw.go");
+                    filename = @"/root/sources/go/hw.go";
+                
+                //wp.SendInput("go", "{0} \"{1}\"", "run", filename);
+                wp.SendInput("gofmt", "\"{1}\"", "run", filename);
 
                 System.Console.WriteLine("ciao");
             }
