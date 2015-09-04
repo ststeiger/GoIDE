@@ -44,12 +44,17 @@
     <script src="Scripts/CodeMirror/addon/edit/matchbrackets.js"></script>
     <script src="Scripts/CodeMirror/modes/go/go.js"></script>
 
-    <style>
+    <style type="text/css" media="all">
         .CodeMirror
         {
             border: 1px solid #999;
             background: #ffc;
         }
+
+        .breakpoints {width: .8em;}
+        .breakpoint { color: #822; }
+      
+
     </style>
 </head>
 <body>
