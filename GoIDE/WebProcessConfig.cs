@@ -42,10 +42,15 @@ namespace GoIDE
                 new System.Collections.Generic.Dictionary<string, string>(System.StringComparer.InvariantCultureIgnoreCase);
             dict.Add("COR-W81-101", @"D:\Programme\Go\");
 
-            if (!dict.ContainsKey(System.Environment.MachineName))
-                throw new System.NotSupportedException("You need to configure the goroot environment variable");
+            if (dict.ContainsKey(System.Environment.MachineName))
+                return dict[System.Environment.MachineName];
 
-            return dict[System.Environment.MachineName];
+            string goroot = System.Environment.GetEnvironmentVariable("goroot");
+
+            if (!string.IsNullOrEmpty(goroot))
+                return goroot;
+
+            throw new System.NotSupportedException("You need to configure the goroot environment variable");
         } // End Function GetGoRoot
 
 
