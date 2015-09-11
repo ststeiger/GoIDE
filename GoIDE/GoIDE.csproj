@@ -1041,6 +1041,8 @@
     <Content Include="Scripts\REQ.js" />
     <Content Include="goprocess.htm" />
     <Content Include="ajax\ShellExecute.ashx" />
+    <None Include="App_Data\caniuse\fulldata-json\pretty-data-1.0.json" />
+    <None Include="App_Data\caniuse\fulldata-json\pretty-data-2.0.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\CanIuseSchema.cs" />
