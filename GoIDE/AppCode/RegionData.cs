@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GoIDE.RegionData
+namespace GoIDE.CanIuse.RegionData
 {
 
 
     public class Data
     {
-        public Chrome chrome { get; set; }
-        public Firefox firefox { get; set; }
-        public Opera opera { get; set; }
-        public Safari safari { get; set; }
-        public Android android { get; set; }
-        public IosSaf ios_saf { get; set; }
-        public OpMob op_mob { get; set; }
-        public Ie ie { get; set; }
-        public Bb bb { get; set; }
-        public IeMob ie_mob { get; set; }
-        public AndUc and_uc { get; set; }
-        public OpMini op_mini { get; set; }
-        public AndChr and_chr { get; set; }
-        public AndFf and_ff { get; set; }
-        public Edge edge { get; set; }
+        public Dictionary<string, double> chrome { get; set; }
+        public Dictionary<string, double> firefox { get; set; }
+        public Dictionary<string, double> opera { get; set; }
+        public Dictionary<string, double> safari { get; set; }
+        public Dictionary<string, double> android { get; set; }
+        public Dictionary<string, double> ios_saf { get; set; }
+        public Dictionary<string, double> op_mob { get; set; }
+        public Dictionary<string, double> ie { get; set; }
+        public Dictionary<string, double> bb { get; set; }
+        public Dictionary<string, double> ie_mob { get; set; }
+        public Dictionary<string, double> and_uc { get; set; }
+        public Dictionary<string, double> op_mini { get; set; }
+        public Dictionary<string, double> and_chr { get; set; }
+        public Dictionary<string, double> and_ff { get; set; }
+        public Dictionary<string, double> edge { get; set; }
     }
 
     public class RootObject

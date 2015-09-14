@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -591,6 +595,7 @@
     <Content Include="App_Data\caniuse\region-usage-json\ZA.json" />
     <Content Include="App_Data\caniuse\region-usage-json\ZM.json" />
     <Content Include="App_Data\caniuse\region-usage-json\ZW.json" />
+    <Content Include="App_Data\caniuse\region-usage-json\AD_prettyfied.json" />
     <None Include="arrow-functions.json" />
     <Content Include="Default.aspx" />
     <Content Include="doc\CodeMirror\activebookmark.js" />
@@ -682,6 +687,7 @@
     <Content Include="doc\GoLang\tos.html" />
     <Content Include="goide.aspx" />
     <Content Include="goide.htm" />
+    <Content Include="Libs\Newtonsoft.Json.dll" />
     <Content Include="Scripts\CodeMirror\addon\comment\comment.js" />
     <Content Include="Scripts\CodeMirror\addon\comment\continuecomment.js" />
     <Content Include="Scripts\CodeMirror\addon\dialog\dialog.css" />
@@ -1045,9 +1051,34 @@
     <None Include="App_Data\caniuse\fulldata-json\pretty-data-2.0.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\CanIuseSchema.cs" />
+    <Compile Include="AppCode\Data\Firefox.cs" />
+    <Compile Include="AppCode\Data\VersionList.cs" />
+    <Compile Include="AppCode\Data\___ItemInfo.cs" />
+    <Compile Include="AppCode\Data\Agents.cs" />
+    <Compile Include="AppCode\Data\AndChr.cs" />
+    <Compile Include="AppCode\Data\AndFf.cs" />
+    <Compile Include="AppCode\Data\Android.cs" />
+    <Compile Include="AppCode\Data\AndUc.cs" />
+    <Compile Include="AppCode\Data\Bb.cs" />
+    <Compile Include="AppCode\Data\Cats.cs" />
+    <Compile Include="AppCode\Data\Chrome.cs" />
+    <Compile Include="AppCode\Data\Edge.cs" />
+    <Compile Include="AppCode\Data\Ie.cs" />
+    <Compile Include="AppCode\Data\IeMob.cs" />
+    <Compile Include="AppCode\Data\IosSaf.cs" />
+    <Compile Include="AppCode\Data\Link.cs" />
+    <Compile Include="AppCode\Data\NotesByNum.cs" />
+    <Compile Include="AppCode\Data\Opera.cs" />
+    <Compile Include="AppCode\Data\OpMini.cs" />
+    <Compile Include="AppCode\Data\OpMob.cs" />
+    <Compile Include="AppCode\Data\Safari.cs" />
+    <Compile Include="AppCode\Data\Rootobj.cs" />
+    <Compile Include="AppCode\Data\Stats.cs" />
+    <Compile Include="AppCode\Data\Statuses.cs" />
+    <Compile Include="AppCode\JsonHelper.cs" />
+    <Compile Include="AppCode\TestCanIuse.cs" />
+    <Compile Include="AppCode\xxx_Features.cs" />
     <Compile Include="AppCode\RegionData.cs" />
-    <Compile Include="App_Data\caniuse\reg1\SampleResponse1.cs" />
     <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>

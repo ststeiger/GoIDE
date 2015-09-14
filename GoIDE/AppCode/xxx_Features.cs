@@ -7,7 +7,7 @@ using System.Web;
 // Yes, the support data on this site is free to use under the CC BY 4.0 license.
 // https://github.com/Fyrd/caniuse
 // https://raw.githubusercontent.com/Fyrd/caniuse/master/features-json/arrow-functions.json
-namespace GoIDE.CanIuseSchema
+namespace GoIDE.CanIuse.Features
 {
 
 
